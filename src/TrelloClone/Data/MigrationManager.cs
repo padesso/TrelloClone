@@ -9,6 +9,20 @@ namespace TrelloClone.Data
 {
     public static class MigrationManager
     {
+        /// <summary>
+        /// Ensures the database exists and is up to date.
+        /// 
+        /// If no EF migrations exist:
+        /// - Uses Database.EnsureCreated() to create the database and all tables based on the current model
+        /// 
+        /// If EF migrations exist:
+        /// - Uses Database.Migrate() to apply pending migrations
+        /// 
+        /// This approach handles the case where the SQLite database file doesn't exist
+        /// and ensures tables are created correctly regardless of migration state.
+        /// </summary>
+        /// <param name="host">The application host</param>
+        /// <returns>The host for method chaining</returns>
         public static IHost MigrateDatabase(this IHost host)
         {
              using(var scope = host.Services.CreateScope())
